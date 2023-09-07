@@ -1,6 +1,6 @@
-DATASET_NAME='coco'
-DATA_PATH='/tmp/data/'${DATASET_NAME}
-WEIGHT_PATH='/tmp/data/weights'
+DATASET_NAME='f30k'
+DATA_PATH='/content/drive/MyDrive/VSE/Infinity_data/f30k'
+WEIGHT_PATH='/content/drive/MyDrive/VSE/Infinity_data/weights'
 
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 train.py \
   --data_path ${DATA_PATH} --data_name ${DATASET_NAME}  \
