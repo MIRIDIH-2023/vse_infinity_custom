@@ -203,7 +203,7 @@ def evalrank(model_path, data_path=None, split='dev', fold5=False, save_path=Non
         opt.caption_loss = False
 
     # load vocabulary used by the model
-    tokenizer = BertTokenizerFast.from_pretrained("kykim/bert-kor-base")
+    tokenizer = BertTokenizer.from_pretrained("kykim/bert-kor-base")
     #tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     
     

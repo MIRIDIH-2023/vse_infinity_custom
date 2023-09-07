@@ -29,7 +29,7 @@ def main():
     logger.info(opt)
 
     # Load Tokenizer and Vocabulary
-    tokenizer = BertTokenizerFast.from_pretrained("kykim/bert-kor-base")
+    tokenizer = BertTokenizer.from_pretrained("kykim/bert-kor-base")
     #tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
     
     vocab = tokenizer.vocab
