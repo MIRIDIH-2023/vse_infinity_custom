@@ -92,7 +92,8 @@ class CustomRawImageDataset(data.Dataset):
         target = process_caption(self.tokenizer, caption_tokens, self.train)
 
         path = f"thumnail_image_{img_index}.png"
-        im_in = np.array(Image.open(os.path.join(self.image_root, path)).convert('RGB'))
+        #im_in = np.array(Image.open(os.path.join(self.image_root, path)).convert('RGB'))
+        im_in = np.array( imread(os.path.join(self.image_root, path),pilmode='RGB') )
         
         processed_image = self._process_image(im_in)
         image = torch.Tensor(processed_image)
