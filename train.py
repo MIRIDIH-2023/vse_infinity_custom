@@ -3,7 +3,7 @@ import os
 import time
 import numpy as np
 import torch
-from transformers import BertTokenizer
+from transformers import BertTokenizer, BertTokenizerFast
 
 from lib.datasets import image_caption
 from lib.vse import VSEModel
@@ -29,7 +29,9 @@ def main():
     logger.info(opt)
 
     # Load Tokenizer and Vocabulary
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    tokenizer = BertTokenizerFast.from_pretrained("kykim/bert-kor-base")
+    #tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    
     vocab = tokenizer.vocab
     opt.vocab_size = len(vocab)
 

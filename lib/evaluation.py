@@ -185,6 +185,7 @@ def eval_ensemble(results_paths, fold5=False):
         logger.info("Text to image: %.1f %.1f %.1f %.1f %.1f" %
                     mean_metrics[5:10])
 
+from transformers import BertTokenizerFast
 
 def evalrank(model_path, data_path=None, split='dev', fold5=False, save_path=None, cxc=False):
     """
@@ -202,7 +203,10 @@ def evalrank(model_path, data_path=None, split='dev', fold5=False, save_path=Non
         opt.caption_loss = False
 
     # load vocabulary used by the model
-    tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    tokenizer = BertTokenizerFast.from_pretrained("kykim/bert-kor-base")
+    #tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+    
+    
     vocab = tokenizer.vocab
     opt.vocab_size = len(vocab)
 

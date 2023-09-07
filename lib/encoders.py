@@ -168,7 +168,9 @@ class EncoderText(nn.Module):
         self.embed_size = embed_size
         self.no_txtnorm = no_txtnorm
 
-        self.bert = BertModel.from_pretrained('bert-base-uncased')
+        self.bert = BertModel.from_pretrained('kykim/bert-kor-base')
+        #self.bert = BertModel.from_pretrained('bert-base-uncased')
+        
         self.linear = nn.Linear(768, embed_size)
         self.gpool = GPO(32, 32)
 
