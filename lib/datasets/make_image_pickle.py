@@ -52,6 +52,7 @@ def start():
     for i, (im_numpy_array, im_index) in tqdm(enumerate(CustomLoader)):
         for cur_img, cur_index in zip(im_numpy_array,im_index):
             image_list[cur_index] = cur_img
+        del im_numpy_array, im_index
             
     image_list = np.array(image_list, dtype=object)
     np.save(customdataset.save_root, image_list)
