@@ -81,11 +81,15 @@ class CustomRawImageDataset(data.Dataset):
         for _index in range(len(json_list)):
             
             for _ in range(self.im_div):
-                keyword = json_list[_index]['keyword']
+                keyword_list = json_list[_index]['keyword']
                 
-                if len(keyword) == 0: #if has error, just unk token
-                    keyword = ['[UNK]']
-                    
+                #if has error, just unk token
+                if len(keyword_list) == 0: 
+                    keyword_list = ['[UNK]']
+                
+                #delete dummy keywords
+                keyword = [k for k in keyword_list if sum(c.isdigit() for c in k) < 3]
+                
                 random.shuffle(keyword)
                 keyword = ' '.join(keyword)
                 
