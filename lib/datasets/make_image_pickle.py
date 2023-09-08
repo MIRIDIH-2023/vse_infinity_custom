@@ -42,7 +42,7 @@ def start():
                                                   batch_size=128,
                                                   shuffle=False,
                                                   pin_memory=True,
-                                                  num_workers=12,
+                                                  num_workers=8,
                                                   drop_last=False,
                                                   collate_fn=collate_fun)
     image_list = [None] * customdataset.image_len
