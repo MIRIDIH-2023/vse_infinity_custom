@@ -15,13 +15,20 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+###################### this block is for loading npy file ######################
+image_npy_root = '/content/drive/MyDrive/VSE/image_list_npy.npy'
+if os.path.exists(image_npy_root):
+    print("image npy root exists. loading npy file...")
+    IMAGE_NPY = np.load(image_npy_root)
+################################################################################
+
 class CustomRawImageDataset(data.Dataset):
     """
     Load precomputed captions and image features
     Possible options: f30k_precomp, coco_precomp
     """
 
-    def __init__(self, data_path, data_name, data_split, tokenzier, opt, train):
+    def __init__(self, data_path, data_name, data_split, tokenzier, opt, train, use_image_npy_file=True):
         ############################ custom options #######################
         self.image_len = 40000 #train length
         self.validation_len = 2000 #validation length
@@ -30,6 +37,7 @@ class CustomRawImageDataset(data.Dataset):
         self.json_root = '/content/drive/MyDrive/data_temp/data_list.pickle'
         ###################################################################
         
+        self.use_image_npy_file = use_image_npy_file
         self.opt = opt
         self.train = train
         self.data_path = data_path
@@ -91,9 +99,12 @@ class CustomRawImageDataset(data.Dataset):
         # Convert caption (string) to word ids (with Size Augmentation at training time).
         target = process_caption(self.tokenizer, caption_tokens, self.train)
 
-        path = f"thumnail_image_{img_index}.png"
-        #im_in = np.array(Image.open(os.path.join(self.image_root, path)).convert('RGB'))
-        im_in = np.array( imread(os.path.join(self.image_root, path),pilmode='RGB') )
+        if self.use_image_npy_file:
+            im_in = IMAGE_NPY[index]
+        else:
+            path = f"thumnail_image_{img_index}.png"
+            #im_in = np.array(Image.open(os.path.join(self.image_root, path)).convert('RGB'))
+            im_in = np.array( imread(os.path.join(self.image_root, path),pilmode='RGB') )
         
         processed_image = self._process_image(im_in)
         image = torch.Tensor(processed_image)
