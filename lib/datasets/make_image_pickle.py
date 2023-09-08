@@ -15,7 +15,7 @@ class CustomImageDataset(data.Dataset):
     def __init__(self):
         super().__init__()
         self.image_root = '/content/drive/MyDrive/images'
-        self.image_len = 45000
+        self.image_len = 41000
         self.save_root = '/content/drive/MyDrive/VSE/image_list_npy.npy'
     
     def __getitem__(self, index):
