@@ -21,6 +21,7 @@ class CustomImageDataset(data.Dataset):
     def __getitem__(self, index):
         path = f"thumnail_image_{index}.png"
         im_in = np.array( imread(os.path.join(self.image_root, path),pilmode='RGB') )
+        #im_in = np.zeros((1,12,1))
         return im_in, index
     
     def __len__(self):
@@ -34,7 +35,8 @@ def collate_fun(data):
         image_return.append(img)
     for idx in index:
         index_return.append(idx)
-        return image_return , index_return
+    
+    return image_return , index_return
 
 def start():
     customdataset = CustomImageDataset()
@@ -46,6 +48,7 @@ def start():
                                                   drop_last=False,
                                                   collate_fn=collate_fun)
     image_list = [None] * customdataset.image_len
+    
     for i, (im_numpy_array, im_index) in tqdm(enumerate(CustomLoader)):
         for cur_img, cur_index in zip(im_numpy_array,im_index):
             image_list[cur_index] = cur_img
