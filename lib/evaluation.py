@@ -205,7 +205,7 @@ def evalrank(model_path, data_path=None, split='dev', fold5=False, save_path=Non
     # load vocabulary used by the model
     #tokenizer = BertTokenizer.from_pretrained("kykim/bert-kor-base")
     #tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    tokenizer = BertTokenizer.from_pretrained('lassl/bert-ko-base')
+    tokenizer = BertTokenizer.from_pretrained('lassl/bert-ko-small')
     
     vocab = tokenizer.vocab
     opt.vocab_size = len(vocab)
