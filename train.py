@@ -29,9 +29,10 @@ def main():
     logger.info(opt)
 
     # Load Tokenizer and Vocabulary
-    tokenizer = BertTokenizer.from_pretrained("kykim/bert-kor-base")
+    #tokenizer = BertTokenizer.from_pretrained("kykim/bert-kor-base")
     #tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
-    
+    tokenizer = BertTokenizer.from_pretrained('lassl/bert-ko-base')
+
     vocab = tokenizer.vocab
     opt.vocab_size = len(vocab)
 
