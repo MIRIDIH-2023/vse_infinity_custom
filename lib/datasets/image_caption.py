@@ -108,7 +108,7 @@ class CustomRawImageDataset(data.Dataset):
         
     def __getitem__(self, index):
         #forward n samples are for validation
-        if not self.train:
+        if self.train:
             index = index + self.validation_len * self.im_div
             
         img_index = index // self.im_div
