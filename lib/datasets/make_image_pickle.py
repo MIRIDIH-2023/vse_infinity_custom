@@ -26,6 +26,16 @@ class CustomImageDataset(data.Dataset):
     def __len__(self):
         return self.image_len
 
+def collate_fun(data):
+    image, index = zip(*data)
+    image_return = []
+    index_return = []
+    for img in image:
+        image_return.append(img)
+    for idx in index:
+        index_return.append(idx)
+        return image_return , index_return
+
 def start():
     customdataset = CustomImageDataset()
     CustomLoader = torch.utils.data.DataLoader(dataset=customdataset,
@@ -33,7 +43,8 @@ def start():
                                                   shuffle=False,
                                                   pin_memory=True,
                                                   num_workers=12,
-                                                  drop_last=False)
+                                                  drop_last=False,
+                                                  collate_fn=collate_fun)
     image_list = [None] * customdataset.image_len
     for i, (im_numpy_array, im_index) in tqdm(enumerate(CustomLoader)):
         for cur_img, cur_index in zip(im_numpy_array,im_index):
