@@ -16,10 +16,21 @@ import logging
 logger = logging.getLogger(__name__)
 
 ###################### this block is for loading npy file ######################
-image_npy_root = '/content/drive/MyDrive/VSE/image_list_npy.npy'
-if os.path.exists(image_npy_root):
+image_npy_root_0 = '/content/drive/MyDrive/VSE/image_list_npy_0.npy'
+image_npy_root_10000 = '/content/drive/MyDrive/VSE/image_list_npy_10000.npy'
+image_npy_root_20000 = '/content/drive/MyDrive/VSE/image_list_npy_20000.npy'
+image_npy_root_30000 = '/content/drive/MyDrive/VSE/image_list_npy_30000.npy'
+
+if os.path.exists(image_npy_root_0):
     print("image npy root exists. loading npy file...")
-    IMAGE_NPY = np.load(image_npy_root)
+    IMAGE_NPY0 = np.load(image_npy_root_0, allow_pickle=True)
+    print("0")
+    IMAGE_NPY10000 = np.load(image_npy_root_10000, allow_pickle=True)
+    print("10000")
+    IMAGE_NPY20000 = np.load(image_npy_root_20000, allow_pickle=True)
+    print("20000")
+    IMAGE_NPY30000 = np.load(image_npy_root_30000, allow_pickle=True)
+    print("30000")
 ################################################################################
 
 class CustomRawImageDataset(data.Dataset):
@@ -30,7 +41,7 @@ class CustomRawImageDataset(data.Dataset):
 
     def __init__(self, data_path, data_name, data_split, tokenzier, opt, train, use_image_npy_file=True):
         ############################ custom options #######################
-        self.image_len = 41000 #train length
+        self.image_len = 40000 #train length
         self.validation_len = 1000 #validation length
         self.im_div = 5 #num of captions
         self.image_root = '/content/drive/MyDrive/images'
@@ -99,8 +110,17 @@ class CustomRawImageDataset(data.Dataset):
         # Convert caption (string) to word ids (with Size Augmentation at training time).
         target = process_caption(self.tokenizer, caption_tokens, self.train)
 
+        #load from npy file
         if self.use_image_npy_file:
-            im_in = IMAGE_NPY[index]
+            if img_index<10000:
+                im_in = IMAGE_NPY0[img_index]
+            elif img_index<20000:
+                im_in = IMAGE_NPY10000[img_index]                
+            elif img_index<30000:
+                im_in = IMAGE_NPY20000[img_index]
+            else:
+                im_in = IMAGE_NPY30000[img_index]
+                
         else:
             path = f"thumnail_image_{img_index}.png"
             #im_in = np.array(Image.open(os.path.join(self.image_root, path)).convert('RGB'))
