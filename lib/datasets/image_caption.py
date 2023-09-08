@@ -30,8 +30,8 @@ class CustomRawImageDataset(data.Dataset):
 
     def __init__(self, data_path, data_name, data_split, tokenzier, opt, train, use_image_npy_file=True):
         ############################ custom options #######################
-        self.image_len = 45000 #train length
-        self.validation_len = 5000 #validation length
+        self.image_len = 41000 #train length
+        self.validation_len = 1000 #validation length
         self.im_div = 5 #num of captions
         self.image_root = '/content/drive/MyDrive/images'
         self.json_root = '/content/drive/MyDrive/data_temp/data_list.pickle'
