@@ -115,11 +115,11 @@ class CustomRawImageDataset(data.Dataset):
             if img_index<10000:
                 im_in = IMAGE_NPY0[img_index]
             elif img_index<20000:
-                im_in = IMAGE_NPY10000[img_index]                
+                im_in = IMAGE_NPY10000[img_index-10000]                
             elif img_index<30000:
-                im_in = IMAGE_NPY20000[img_index]
+                im_in = IMAGE_NPY20000[img_index-20000]
             else:
-                im_in = IMAGE_NPY30000[img_index]
+                im_in = IMAGE_NPY30000[img_index-30000]
                 
         else:
             path = f"thumnail_image_{img_index}.png"
