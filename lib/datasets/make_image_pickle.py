@@ -53,8 +53,9 @@ def start():
         for cur_img, cur_index in zip(im_numpy_array,im_index):
             image_list[cur_index] = cur_img
         del im_numpy_array, im_index
-            
+    print("loading done")
     image_list = np.array(image_list, dtype=object)
+    print("saving...")
     np.save(customdataset.save_root, image_list)
 
 if __name__=="__main__":
