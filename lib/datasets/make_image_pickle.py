@@ -15,10 +15,12 @@ class CustomImageDataset(data.Dataset):
     def __init__(self):
         super().__init__()
         self.image_root = '/content/drive/MyDrive/images'
-        self.image_len = 41000
-        self.save_root = '/content/drive/MyDrive/VSE/image_list_npy.npy'
+        self.image_len = 10000
+        self.save_root = f'/content/drive/MyDrive/VSE/image_list_npy_{args.number}.npy'
     
     def __getitem__(self, index):
+        index = index + args.number
+        
         path = f"thumnail_image_{index}.png"
         im_in = np.array( imread(os.path.join(self.image_root, path),pilmode='RGB') )
         #im_in = np.zeros((1,12,1))
@@ -58,5 +60,12 @@ def start():
     print("saving...")
     np.save(customdataset.save_root, image_list)
 
+
+import argparse
+
 if __name__=="__main__":
+    
+    parser = argparse.ArgumentParser(description='test')
+    parser.add_argument('--number', type=int, help='start index')
+    args = parser.parse_args()
     start()
