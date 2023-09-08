@@ -19,9 +19,8 @@ class CustomImageDataset(data.Dataset):
         self.save_root = f'/content/drive/MyDrive/VSE/image_list_npy_{args.number}.npy'
     
     def __getitem__(self, index):
-        index = index + args.number
         
-        path = f"thumnail_image_{index}.png"
+        path = f"thumnail_image_{index + args.number}.png"
         im_in = np.array( imread(os.path.join(self.image_root, path),pilmode='RGB') )
         #im_in = np.zeros((1,12,1))
         return im_in, index
