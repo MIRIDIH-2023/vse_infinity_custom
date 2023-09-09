@@ -299,7 +299,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         
         for i in range(num_images):
             image_index = argsorted_sims[i][0]
-            print(image_index)
+            print(argsorted_sims[i])
             #if recommend text index, change to image index
             if(image_index > 40000):
                 image_index-=40000
