@@ -31,7 +31,7 @@ def main():
         ]
     elif opt.dataset =='custom':
         weights_bases = [
-            'none'
+            '/content/drive/MyDrive/VSE/MODEL'
         ]
     else:
         raise ValueError('Invalid dataset argument {}'.format(opt.dataset))
