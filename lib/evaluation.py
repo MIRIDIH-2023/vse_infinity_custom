@@ -252,6 +252,7 @@ def embedding_all(model_path, data_path=None, split='dev', save_path=None):
 
 from PIL import Image
 import matplotlib.pyplot as plt
+from tqdm import tqdm
 
 def recommend(model, combined_image_caption_array, tokenizer):
     
@@ -302,7 +303,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         fig = plt.figure(figsize=(20, 16))
         image_root = '/content/drive/MyDrive/images'
         
-        for i in range(num_images):
+        for i in tqdm(range(num_images)):
             image_index = argsorted_sims[i]
             
             #if recommend text index, change to image index
