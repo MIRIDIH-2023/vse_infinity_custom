@@ -287,6 +287,11 @@ def recommend(model, combined_image_caption_array, tokenizer):
         sims = compute_sim(combined_image_caption_array, user_output) #[length*2, 768] * [768, 1] = [length*2, 1]
         sims = sims.reshape(-1) #[length * 2]
         
+        ################# danger zone ###################################
+        sims = sims[40000:] #only use text embedding
+        ##################################################################
+        
+        
         # change sim score to index 
         argsorted_sims = np.argsort(sims)[::-1] #[length * 2]
         
