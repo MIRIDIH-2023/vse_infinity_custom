@@ -283,6 +283,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         
         ## calculate sim ##
         sims = compute_sim(combined_image_caption_array, user_output) #[length*2, 768] * [768, 1] = [length*2, 1]
+        sims = sims.reshape(-1)
         
         # change sim score to index 
         argsorted_sims = np.argsort(sims)[::-1]
