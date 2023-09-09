@@ -255,7 +255,6 @@ import matplotlib.pyplot as plt
 
 def recommend(model, combined_image_caption_array, tokenizer):
     
-    model.cuda()
     user_input = '0'
     
     while user_input!='-1':
