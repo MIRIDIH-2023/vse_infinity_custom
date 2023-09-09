@@ -283,13 +283,14 @@ def recommend(model, combined_image_caption_array, tokenizer):
         
         ## calculate sim ##
         sims = compute_sim(combined_image_caption_array, user_output) #[length*2, 768] * [768, 1] = [length*2, 1]
-        sims = sims.reshape(-1)
+        sims = sims.reshape(-1) #[length * 2]
         
         # change sim score to index 
-        argsorted_sims = np.argsort(sims)[::-1]
-        print(np.shape(sims))
-        print(sims)
-        print(argsorted_sims)
+        argsorted_sims = np.argsort(sims)[::-1] #[length * 2]
+        
+        for ii in range(10):
+            _score = sims[argsorted_sims[ii]]
+            print(f"rank {ii+1}: sim score = {_score}")
         
         # 이미지를 표시할 화면 크기 설정
         num_images = 20  # 이미지 파일 개수 (0.png부터 20.png까지)
@@ -301,7 +302,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         image_root = '/content/drive/MyDrive/images'
         
         for i in range(num_images):
-            image_index = argsorted_sims[i][0]
+            image_index = argsorted_sims[i]
             
             #if recommend text index, change to image index
             if(image_index > 40000):
