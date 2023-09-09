@@ -39,7 +39,7 @@ class CustomRawImageDataset(data.Dataset):
     Possible options: f30k_precomp, coco_precomp
     """
 
-    def __init__(self, data_path, data_name, data_split, tokenzier, opt, train, use_image_npy_file=True):
+    def __init__(self, data_path, data_name, data_split, tokenzier, opt, train, use_image_npy_file=True, is_test=False):
         ############################ custom options #######################
         self.image_len = 40000 #train length
         self.validation_len = 1000 #validation length
@@ -48,6 +48,7 @@ class CustomRawImageDataset(data.Dataset):
         self.json_root = '/content/drive/MyDrive/data_temp/data_list.pickle'
         ###################################################################
         
+        self.is_test = is_test
         self.use_image_npy_file = use_image_npy_file
         self.opt = opt
         self.train = train
@@ -110,8 +111,13 @@ class CustomRawImageDataset(data.Dataset):
         #forward n samples are for validation
         if self.train:
             index = index + self.validation_len * self.im_div
+        
+        #when testing, it has only one captions
+        if not self.is_test:    
+            img_index = index // self.im_div
+        else:
+            img_index = index
             
-        img_index = index // self.im_div
         caption = self.captions[index]
         caption_tokens = self.tokenizer.basic_tokenizer.tokenize(caption)
 
@@ -141,11 +147,20 @@ class CustomRawImageDataset(data.Dataset):
 
     def __len__(self):
         _len = self.image_len
+        
+        #split train & validation
         if self.train:
             _len = self.image_len - self.validation_len
+            _len = _len * self.im_div #image data length * num of captions
         else:
             _len = self.validation_len
-        return _len * self.im_div #image data length * num of captions
+            _len = _len * self.im_div #image data length * num of captions
+        
+        #when testing, embedding all data & it has only one captions
+        if self.is_test:
+            _len = self.image_len
+            
+        return _len 
 
     def _process_image(self, im_in):
         """
@@ -538,7 +553,7 @@ def collate_fn(data):
 
 
 def get_loader(data_path, data_name, data_split, tokenizer, opt, batch_size=100,
-               shuffle=True, num_workers=2, train=True):
+               shuffle=True, num_workers=2, train=True, test=False):
     """Returns torch.utils.data.DataLoader for custom coco dataset."""
     if train:
         drop_last = True
@@ -555,7 +570,7 @@ def get_loader(data_path, data_name, data_split, tokenizer, opt, batch_size=100,
                                                   drop_last=drop_last)
     else:
         #dset = RawImageDataset(data_path, data_name, data_split, tokenizer, opt, train)
-        dset = CustomRawImageDataset(data_path, data_name, data_split, tokenizer, opt, train)
+        dset = CustomRawImageDataset(data_path, data_name, data_split, tokenizer, opt, train, is_test=test)
         data_loader = torch.utils.data.DataLoader(dataset=dset,
                                                   batch_size=batch_size,
                                                   shuffle=shuffle,
@@ -581,5 +596,5 @@ def get_train_loader(data_path, data_name, tokenizer, batch_size, workers, opt, 
 
 def get_test_loader(split_name, data_name, tokenizer, batch_size, workers, opt):
     test_loader = get_loader(opt.data_path, data_name, split_name, tokenizer, opt,
-                             batch_size, False, workers, train=False)
+                             batch_size, False, workers, train=False, test=True)
     return test_loader

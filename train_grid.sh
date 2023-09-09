@@ -1,4 +1,4 @@
-DATASET_NAME='f30k'
+DATASET_NAME='custom'
 DATA_PATH='/content/drive/MyDrive/VSE/Infinity_data/f30k'
 WEIGHT_PATH='/content/drive/MyDrive/VSE/Infinity_data/weights'
 

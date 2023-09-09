@@ -167,6 +167,11 @@ class VSEModel(object):
         lengths = torch.Tensor(lengths).cuda()
         cap_emb = self.txt_enc(captions, lengths)
         return img_emb, cap_emb
+    
+    def embedding_one_text(self,caption,lengths):
+        lengths = torch.Tensor(lengths).cuda()
+        cap_emb = self.txt_enc(caption, lengths)
+        return cap_emb
 
     def forward_loss(self, img_emb, cap_emb):
         """Compute the loss given pairs of image and caption embeddings

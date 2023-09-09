@@ -8,7 +8,6 @@ import numpy as np
 from collections import OrderedDict
 from transformers import BertTokenizer
 
-from lib.datasets import image_caption
 from lib.vse import VSEModel
 
 logger = logging.getLogger(__name__)
@@ -186,6 +185,134 @@ def eval_ensemble(results_paths, fold5=False):
                     mean_metrics[5:10])
 
 from transformers import BertTokenizerFast
+import os
+
+def embedding_all(model_path, data_path=None, split='dev', save_path=None):
+    # load model and options
+    checkpoint = torch.load(model_path)
+    opt = checkpoint['opt']
+    opt.workers = 5
+
+    logger.info(opt)
+    if not hasattr(opt, 'caption_loss'):
+        opt.caption_loss = False
+    
+    tokenizer = BertTokenizer.from_pretrained('lassl/bert-ko-small')
+    
+    vocab = tokenizer.vocab
+    opt.vocab_size = len(vocab)
+
+    opt.backbone_path = '/content/drive/MyDrive/VSE/Infinity_data/weights/original_updown_backbone.pth'
+    if data_path is not None:
+        opt.data_path = data_path
+
+    # construct model
+    model = VSEModel(opt)
+
+    #########################################################################################
+    if not os.path.exists(save_path+'cap_emb.npy'):
+        model.make_data_parallel()
+        # load model state
+        model.load_state_dict(checkpoint['model'])
+        model.val_start()
+        
+        logger.info('Loading dataset')
+        from lib.datasets import image_caption
+        data_loader = image_caption.get_test_loader(split, opt.data_name, tokenizer,
+                                                    opt.batch_size, opt.workers, opt)
+
+        logger.info('Computing results...')
+        with torch.no_grad():
+            if opt.precomp_enc_type == 'basic':
+                img_embs, cap_embs = encode_data(model, data_loader)
+            else:
+                img_embs, cap_embs = encode_data(model, data_loader, backbone=True)
+
+        print( f"image embedding shape:{np.shape(img_embs)}" )
+        print( f"caption embedding shape:{np.shape(cap_embs)}")
+        
+        np.save(save_path+'img_emb.npy', img_embs) #len data * 768
+        np.save(save_path+'cap_emb.npy', cap_embs) #len data * 768
+        
+        print("save done!")
+    else:
+        print("loading exist embedding")
+        
+        model.load_state_dict(checkpoint['model'])
+        model.val_start()
+        
+        img_embs = np.load(save_path+'img_emb.npy')
+        cap_embs = np.load(save_path+'cap_emb.npy')
+        
+    #########################################################################################
+    combined_image_caption_array = np.concatenate((img_embs, cap_embs), axis=0) # [len_data * 2 , 768 ]
+    
+    print("model inference start!")
+    recommend(model, combined_image_caption_array, tokenizer)
+
+from PIL import Image
+import matplotlib.pyplot as plt
+
+def recommend(model, combined_image_caption_array, tokenizer):
+    
+    user_input = '0'
+    
+    while user_input!='-1':
+        
+        # if plt is open, close it (reset previous recommed)
+        try:
+            plt.close()
+        except:
+            pass
+        
+        user_input = input("user input: ")
+        
+        ########### preprocessing ########################
+        caption_tokens = tokenizer.basic_tokenizer.tokenize(user_input)
+        output_tokens = ['[CLS]'] + caption_tokens + ['[SEP]']
+        target = tokenizer.convert_tokens_to_ids(output_tokens)
+        target = torch.Tensor(target)
+        
+        target = target.view(1, -1).long() #[1, input length]
+        len_input = [len(target)] #[input length]
+        ##################################################        
+        
+        #### inference ####
+        model_output = model.embedding_one_text(target,len_input)
+        user_output = model_output.data.cpu().numpy().copy() # [1,768]
+        
+        ## calculate sim ##
+        sims = compute_sim(combined_image_caption_array, user_output) #[length*2, 768] * [768, 1] = [length*2, 1]
+        
+        # change sim score to index 
+        argsorted_sims = np.argsort(sims)[::-1]
+        
+        
+        # 이미지를 표시할 화면 크기 설정
+        num_images = 20  # 이미지 파일 개수 (0.png부터 20.png까지)
+        columns = 5      # 한 행에 표시할 이미지 개수
+        rows = (num_images // columns)
+
+        # 이미지를 표시할 새로운 화면 생성
+        fig = plt.figure(figsize=(40, 32))
+        image_root = '/content/drive/MyDrive/images'
+        
+        for i in range(num_images):
+            image_index = argsorted_sims[i]
+            #if recommend text index, change to image index
+            if(image_index > 40000):
+                image_index-=40000
+            
+            filename = f"{image_root}/thumnail_image_{image_index}.png"
+            try:
+                img = Image.open(filename)
+                fig.add_subplot(rows, columns, i + 1)
+                plt.imshow(img)
+                plt.axis('off')  # 이미지 축 숨기기
+            except FileNotFoundError:
+                print(f"파일 {filename}을 찾을 수 없습니다.")
+        plt.show()
+        
 
 def evalrank(model_path, data_path=None, split='dev', fold5=False, save_path=None, cxc=False):
     """
@@ -223,6 +350,7 @@ def evalrank(model_path, data_path=None, split='dev', fold5=False, save_path=Non
     model.val_start()
 
     logger.info('Loading dataset')
+    from lib.datasets import image_caption
     data_loader = image_caption.get_test_loader(split, opt.data_name, tokenizer,
                                                 opt.batch_size, opt.workers, opt)
 
@@ -301,7 +429,7 @@ def evalrank(model_path, data_path=None, split='dev', fold5=False, save_path=Non
 
 
 def compute_sim(images, captions):
-    similarities = np.matmul(images, np.matrix.transpose(captions))
+    similarities = np.matmul(images, np.matrix.transpose(captions)) #[len,768] * [768,len]
     return similarities
 
 
