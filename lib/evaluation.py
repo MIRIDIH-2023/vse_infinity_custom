@@ -267,6 +267,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         
         user_input = input("user input: ")
         
+        print(f"forecasting with user input {user_input}")
         ########### preprocessing ########################
         caption_tokens = tokenizer.basic_tokenizer.tokenize(user_input)
         output_tokens = ['[CLS]'] + caption_tokens + ['[SEP]']
