@@ -288,6 +288,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         # change sim score to index 
         argsorted_sims = np.argsort(sims)[::-1]
         print(np.shape(sims))
+        print(sims)
         print(argsorted_sims)
         
         # 이미지를 표시할 화면 크기 설정
