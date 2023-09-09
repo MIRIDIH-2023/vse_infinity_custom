@@ -292,7 +292,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         
         for ii in range(10):
             _score = sims[argsorted_sims[ii]]
-            print(f"rank {ii+1}: sim score = {_score}")
+            print(f"rank {ii+1}: index {argsorted_sims[ii]} - sim score = {_score}")
         
         # 이미지를 표시할 화면 크기 설정
         num_images = 20  # 이미지 파일 개수 (0.png부터 20.png까지)
