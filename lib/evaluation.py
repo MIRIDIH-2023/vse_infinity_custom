@@ -299,7 +299,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         rows = (num_images // columns)
 
         # 이미지를 표시할 새로운 화면 생성
-        fig = plt.figure(figsize=(40, 32))
+        fig = plt.figure(figsize=(20, 16))
         image_root = '/content/drive/MyDrive/images'
         
         for i in range(num_images):
