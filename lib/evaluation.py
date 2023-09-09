@@ -255,6 +255,7 @@ import matplotlib.pyplot as plt
 
 def recommend(model, combined_image_caption_array, tokenizer):
     
+    model.cuda()
     user_input = '0'
     
     while user_input!='-1':
@@ -273,7 +274,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         target = tokenizer.convert_tokens_to_ids(output_tokens)
         target = torch.Tensor(target)
         
-        target = target.view(1, -1).long() #[1, input length]
+        target = target.view(1, -1).long().cuda() #[1, input length]
         len_input = [len(target)] #[input length]
         ##################################################        
         
@@ -298,7 +299,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         image_root = '/content/drive/MyDrive/images'
         
         for i in range(num_images):
-            image_index = argsorted_sims[i]
+            image_index = argsorted_sims[i][0]
             #if recommend text index, change to image index
             if(image_index > 40000):
                 image_index-=40000
