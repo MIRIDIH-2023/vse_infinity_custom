@@ -318,7 +318,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
                 plt.axis('off')  # 이미지 축 숨기기
             except FileNotFoundError:
                 print(f"파일 {filename}을 찾을 수 없습니다.")
-        plt.savefig(f"result-prompt{user_input}.png")
+        plt.savefig(f"result-prompt{user_input[:50]}.png")
         
 
 def evalrank(model_path, data_path=None, split='dev', fold5=False, save_path=None, cxc=False):
