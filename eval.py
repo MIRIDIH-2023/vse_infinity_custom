@@ -26,7 +26,7 @@ def main():
     elif opt.dataset == 'f30k':
         weights_bases = [
             #'runs/release_weights/f30k_butd_region_bert',
-            'runs/release_weights/f30k_butd_grid_bert',
+            '/content/drive/MyDrive/VSE/Infinity_data/pretrained_f30k/f30k_butd_grid_bert',
             #'runs/release_weights/f30k_wsl_grid_bert',
         ]
     elif opt.dataset =='custom':
