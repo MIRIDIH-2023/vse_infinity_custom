@@ -94,8 +94,8 @@ class CustomRawImageDataset(data.Dataset):
                 random.shuffle(keyword)
                 keyword = ' '.join(keyword)
                 
-                if len(keyword)>400:
-                    keyword = keyword[:400]
+                if len(keyword)>300:
+                    keyword = keyword[:300]
                 
                 return_list.append(keyword)
 
