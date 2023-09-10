@@ -169,8 +169,8 @@ class EncoderText(nn.Module):
         self.no_txtnorm = no_txtnorm
 
         #self.bert = BertModel.from_pretrained('kykim/bert-kor-base')
-        #self.bert = BertModel.from_pretrained('bert-base-uncased')
-        self.bert = BertModel.from_pretrained('lassl/bert-ko-small')
+        self.bert = BertModel.from_pretrained('bert-base-uncased')
+        #self.bert = BertModel.from_pretrained('lassl/bert-ko-small')
 
         self.linear = nn.Linear(256,embed_size)
         #self.linear = nn.Linear(768, embed_size)
