@@ -197,8 +197,13 @@ def embedding_all(model_path, data_path=None, split='dev', save_path=None):
     if not hasattr(opt, 'caption_loss'):
         opt.caption_loss = False
     
-    tokenizer = BertTokenizer.from_pretrained('lassl/bert-ko-small')
-    
+    if 'f30k' in save_path:
+        tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+        print("using tokenizer bert-base-uncased")
+    else:
+        tokenizer = BertTokenizer.from_pretrained('lassl/bert-ko-small')
+        print("using tokenizer bert-ko-small")
+        
     vocab = tokenizer.vocab
     opt.vocab_size = len(vocab)
 
@@ -245,7 +250,10 @@ def embedding_all(model_path, data_path=None, split='dev', save_path=None):
         cap_embs = np.load(save_path+'cap_emb.npy')
         
     #########################################################################################
-    combined_image_caption_array = np.concatenate((img_embs, cap_embs), axis=0) # [len_data * 2 , 768 ]
+    if 'f30k' in save_path:
+        combined_image_caption_array = img_embs #when using f30k model, we embed image only (since it is english bert)
+    else:
+        combined_image_caption_array = np.concatenate((img_embs, cap_embs), axis=0) # [len_data * 2 , 768 ]
     
     print("model inference start!")
     recommend(model, combined_image_caption_array, tokenizer)
@@ -288,7 +296,7 @@ def recommend(model, combined_image_caption_array, tokenizer):
         sims = sims.reshape(-1) #[length * 2]
         
         ################# danger zone ###################################
-        sims = sims[40000:] #only use text embedding
+        #sims = sims[40000:] #only use text embedding
         ##################################################################
         
         

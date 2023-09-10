@@ -25,9 +25,9 @@ def main():
         ]
     elif opt.dataset == 'f30k':
         weights_bases = [
-            'runs/release_weights/f30k_butd_region_bert',
+            #'runs/release_weights/f30k_butd_region_bert',
             'runs/release_weights/f30k_butd_grid_bert',
-            'runs/release_weights/f30k_wsl_grid_bert',
+            #'runs/release_weights/f30k_wsl_grid_bert',
         ]
     elif opt.dataset =='custom':
         weights_bases = [
@@ -55,7 +55,9 @@ def main():
                 evaluation.evalrank(model_path, data_path=opt.data_path, split='testall', fold5=True, cxc=True)
         elif opt.dataset == 'f30k':
             # Evaluate Flickr30K
-            evaluation.evalrank(model_path, data_path=opt.data_path, split='test', fold5=False, save_path=save_path)
+            #evaluation.evalrank(model_path, data_path=opt.data_path, split='test', fold5=False, save_path=save_path)
+            save_path = os.path.join(base, 'embedding_f30k_')
+            evaluation.embedding_all(model_path, data_path=opt.data_path, split='test', save_path=save_path)
         elif opt.dataset == 'custom':
             save_path = os.path.join(base, 'embedding')
             evaluation.embedding_all(model_path, data_path=opt.data_path, split='test', save_path=save_path)
