@@ -254,9 +254,11 @@ def embedding_all(model_path, data_path=None, split='dev', save_path=None):
     #########################################################################################
     if 'f30k' in save_path:
         combined_image_caption_array = img_embs #when using f30k model, we embed image only (since it is english bert)
+        print("using image only")
     else:
         combined_image_caption_array = np.concatenate((img_embs, cap_embs), axis=0) # [len_data * 2 , 768 ]
-    
+        print("using image caption all")
+        
     print("model inference start!")
     recommend(model, combined_image_caption_array, tokenizer)
 
