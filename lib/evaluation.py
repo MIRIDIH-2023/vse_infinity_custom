@@ -243,6 +243,8 @@ def embedding_all(model_path, data_path=None, split='dev', save_path=None):
     else:
         print("loading exist embedding")
         
+        print(f"load from path {save_path}")
+        
         model.load_state_dict(checkpoint['model'])
         model.val_start()
         
