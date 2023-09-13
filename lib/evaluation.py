@@ -251,6 +251,9 @@ def embedding_all(model_path, data_path=None, split='dev', save_path=None):
         img_embs = np.load(save_path+'img_emb.npy')
         cap_embs = np.load(save_path+'cap_emb.npy')
         
+        print( f"image embedding shape:{np.shape(img_embs)}" )
+        print( f"caption embedding shape:{np.shape(cap_embs)}")
+        
     #########################################################################################
     if 'f30k' in save_path:
         combined_image_caption_array = img_embs #when using f30k model, we embed image only (since it is english bert)

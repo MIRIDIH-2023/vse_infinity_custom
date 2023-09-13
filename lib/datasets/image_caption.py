@@ -82,22 +82,49 @@ class CustomRawImageDataset(data.Dataset):
         for _index in range(len(json_list)):
             
             for _ in range(self.im_div):
-                keyword_list = json_list[_index]['keyword']
                 
-                #if has error, just unk token
-                if len(keyword_list) == 0: 
-                    keyword_list = ['[UNK]']
-                
-                #delete dummy keywords
-                keyword = [k for k in keyword_list if sum(c.isdigit() for c in k) < 3]
-                
-                random.shuffle(keyword)
-                keyword = ' '.join(keyword)
-                
-                if len(keyword)>100:
-                    keyword = keyword[:100]
-                
-                return_list.append(keyword)
+                if _==0:
+                    keyword_list = json_list[_index]['keyword']
+                    
+                    #if has error, just unk token
+                    if len(keyword_list) == 0: 
+                        keyword_list = ['[UNK]']
+                    
+                    #delete dummy keywords
+                    keyword = [k for k in keyword_list if sum(c.isdigit() for c in k) < 3]
+                    
+                    random.shuffle(keyword)
+                    keyword = ' '.join(keyword)
+                    
+                    if len(keyword)>100:
+                        keyword = keyword[:100]
+                    
+                    return_list.append(keyword)
+                else:
+                    text = ""
+
+                    for j in range(len(json_list[_index]['form'])):
+                        if type(json_list[_index]['form'][j]['text']) == str:
+                            text += json_list[_index]['form'][j]['text'] + "\n"
+
+                    words = text.split()
+                    
+                    # 남길 단어의 비율 (예를 들어 50%를 남길 경우 0.5로 설정)
+                    n_percent = 0.5
+
+                    # 남길 단어의 개수 계산
+                    num_to_keep = int(len(words) * n_percent)
+
+                    # 남길 단어를 랜덤하게 선택 (순서는 그대로 유지)
+                    selected_words = random.sample(words, num_to_keep)
+
+                    # 선택된 단어로 결과 문자열 생성
+                    result_string = ' '.join(selected_words)
+
+                    if(len(result_string)>150):
+                        result_string = result_string[:150]
+                        
+                    return_list.append(result_string)
 
             """
             text = ""
