@@ -81,6 +81,7 @@ class CustomRawImageDataset(data.Dataset):
         return_list = []
         for _index in range(len(json_list)):
             
+            # make caption for im_div(1 or 5) time
             for _ in range(self.im_div):
                 
                 if _==0:
@@ -599,6 +600,8 @@ def get_loader(data_path, data_name, data_split, tokenizer, opt, batch_size=100,
                                                   num_workers=num_workers,
                                                   drop_last=drop_last)
     else:
+        #our miridi custom dataset #################3
+        
         #dset = RawImageDataset(data_path, data_name, data_split, tokenizer, opt, train)
         dset = CustomRawImageDataset(data_path, data_name, data_split, tokenizer, opt, train, is_test=test)
         data_loader = torch.utils.data.DataLoader(dataset=dset,

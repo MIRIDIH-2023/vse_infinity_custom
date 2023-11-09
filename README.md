@@ -1,3 +1,12 @@
+# how to use:
+# %cd vse_infinity_custom
+# !python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 0
+# !python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 10000
+# !python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 20000
+# !python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 30000 
+# !sh train_grid.sh
+
+
 # Learning the Best Pooling Strategy for Visual Semantic Embedding
 
 <img src="docs/assets/img/pytorch-logo-dark.png" width="10%"> [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) 

@@ -1,6 +1,6 @@
 DATASET_NAME='custom'
-DATA_PATH='/content/drive/MyDrive/VSE/Infinity_data/f30k'
-WEIGHT_PATH='/content/drive/MyDrive/VSE/Infinity_data/weights'
+DATA_PATH='/content/drive/MyDrive/VSE/Infinity_data/None'
+WEIGHT_PATH='/content/drive/MyDrive/VSE/Infinity_data/None'
 
 CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7 python3 train.py \
   --data_path ${DATA_PATH} --data_name ${DATASET_NAME}  \

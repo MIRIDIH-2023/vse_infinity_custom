@@ -38,6 +38,7 @@ def main():
     vocab = tokenizer.vocab
     opt.vocab_size = len(vocab)
 
+    #load our custom dataset, loader #################################
     train_loader, val_loader = image_caption.get_loaders(
         opt.data_path, opt.data_name, tokenizer, opt.batch_size, opt.workers, opt)
 
