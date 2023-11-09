@@ -1,11 +1,17 @@
 # how to use:
-%cd vse_infinity_custom \n
-!python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 0 \n
-!python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 10000 \n
-!python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 20000 \n
-!python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 30000  \n
+%cd vse_infinity_custom \
+
+!python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 0 \
+
+!python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 10000 \
+
+!python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 20000 \
+
+!python /content/vse_infinity_custom/lib/datasets/make_image_pickle.py --number 30000  \
+
 !sh train_grid.sh \n
-당시 google colab gpu 문제로 인해 데이터를 npy 파일로 만들어서 사용하였음. \n
+
+당시 google colab gpu 문제로 인해 데이터를 npy 파일로 만들어서 사용하였음. \
 
 # Learning the Best Pooling Strategy for Visual Semantic Embedding
 
